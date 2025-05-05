@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Cutter</title>
+</head>
+<body>
+  <h2>Video Cutter Tool</h2>
+  <form id="uploadForm">
+    <input type="file" name="video" accept="video/mp4" required><br>
+    <input type="text" name="durations" placeholder="Enter durations (e.g., 4.9,0.4,...)" required><br>
+    <button type="submit">Cut Video</button>
+  </form>
+  <div id="results"></div>
+
+  <script>
+    document.getElementById("uploadForm").onsubmit = async function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const response = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      const results = document.getElementById("results");
+      results.innerHTML = '<h3>Clips:</h3>' + data.clips.map(link => 
+        `<a href="${link}" download>${link}</a><br>`).join('');
+    };
+  </script>
+</body>
+</html>
